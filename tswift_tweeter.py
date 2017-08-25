@@ -1,4 +1,4 @@
-import yaml, requests
+import yaml, requests, pickle
 from twython import Twython
 
 

@@ -34,6 +34,12 @@ def random_verb():
         word = syn_to_word("v")
     return word
 
+def random_adj():
+    word = syn_to_word("a")
+    while " " in word or not common(word):
+        word = syn_to_word("a")
+    return word
+
 def rhyme(word):
     if " " in word:
         word = word.split(" ")[-1]
@@ -43,7 +49,7 @@ def rhyme(word):
     rhyme = random.choice(l)
     seen_rhymes = set()
     while not common(rhyme):
-        if len(seen_rhymes) == l:
+        if rhyme in seen_rhymes:
             return word
         seen_rhymes.add(rhyme)
         rhyme = random.choice(l)
@@ -85,16 +91,29 @@ def feeling22():
 
     return payload
 
+def lookwhat():
+    a = random_adj()
+    b = random_noun()
 
-tweets = []
-tweets.append(blankspace())
-tweets.append(youbelong())
-tweets.append(feeling22())
+    payload = \
+        "But I got " + a + ", I got " + rhyme(a) + " in the nick of " + b + ",\nHoney, I rose up from the dead, I do it " + rhyme(b) + ". #LookWhatYouMadeMeDo"
 
-for t in tweets:
-    print("\n")
-    print t
+    return payload
 
-f = open("tstweets.pkl", "wb")
-pickle.dump(tweets, f)
-f.close()
+def generate_monthly():
+    tweets = []
+    for i in range(80):
+        a = random.random()
+        if a > 0.9:
+            tweets.append(blankspace())
+        elif a > 0.8:
+            tweets.append(lookwhat())
+        elif a > 0.5:
+            tweets.append(feeling22())
+        else:
+            tweets.append(youbelong())
+
+
+    f = open("tstweets.pkl", "wb")
+    pickle.dump(tweets, f)
+    f.close()
